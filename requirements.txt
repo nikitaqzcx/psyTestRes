@@ -1,0 +1,6 @@
+customtkinter
+tkfilebrowser
+tkcalendar
+openpyxl
+xlrd
+python-docx
