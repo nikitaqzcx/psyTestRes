@@ -1,0 +1,33 @@
+name: Python Application
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest  # Build for macOS (ARM architecture)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12.7
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.12.7"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller customtkinter tkcalendar openpyxl xlrd python-docx
+      - name: Build the application for macOS using PyInstaller (ARM)
+        run: |
+          # Ensure the build targets ARM architecture by explicitly using the 'arch' command
+          arch -arm64 pyinstaller --onefile --windowed main.py
+      - name: Archive macOS production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macOS Application Artifacts
+          path: .///*
