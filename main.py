@@ -1,7 +1,8 @@
 import tkinter as tk
 from datetime import datetime
 import customtkinter as ctk
-from tkinter import messagebox, filedialog, ttk
+from tkinter import messagebox, ttk
+import tkfilebrowser
 import sqlite3
 from tkcalendar import Calendar
 import locale
@@ -112,7 +113,7 @@ class App:
 
     def open_file(self):
         # Let the user select an Excel file (both .xls and .xlsx)
-        file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xls;*.xlsx")])
+        file_path = tkfilebrowser.askopenfilename(filetypes=[("Excel files", "*.xls;*.xlsx")])
         if file_path:
 
             # Store the file path
@@ -259,7 +260,7 @@ class App:
             default_filename = item_data[1]  # Using the item's name for the default filename
 
             # Prompt user for file save location with pre-filled name
-            save_path = filedialog.asksaveasfilename(defaultextension=".docx", 
+            save_path = tkfilebrowser.asksaveasfilename(defaultextension=".docx", 
                                                     initialfile=default_filename + ".docx", 
                                                     filetypes=[("Word documents", "*.docx")])
             if not save_path:  # If the user cancels the file dialog
