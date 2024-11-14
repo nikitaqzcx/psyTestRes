@@ -1,7 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
-name: Python application
+name: Python Application
 
 on:
   push:
@@ -14,26 +11,46 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # Build for Windows
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.10
+    - name: Set up Python 3.12.7
       uses: actions/setup-python@v3
       with:
         python-version: "3.12.7"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        
-    - name: Initial
-      run: python -m PyInstaller --onefile --windowed main.py
-
-    - name: Archive production artifacts
+        pip install pyinstaller customtkinter tkcalendar openpyxl xlrd python-docx
+    - name: Build the application for Windows using PyInstaller
+      run: |
+        pyinstaller --onefile --windowed main.py
+    - name: Archive Windows production artifacts
       uses: actions/upload-artifact@v4
       with:
-          name: Application Artifacts
-          path: 
-            ./dist/**
-    
+        name: Windows Application Artifacts
+        path: ./dist/*
+
+  build_mac:
+    runs-on: macos-latest  # Build for macOS
+    needs: build  # This ensures macOS build starts after the Windows build
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.12.7
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.12.7"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller customtkinter tkcalendar openpyxl xlrd python-docx
+    - name: Build the application for macOS using PyInstaller
+      run: |
+        pyinstaller --onefile --windowed main.py  # Use .icns icon for macOS
+    - name: Archive macOS production artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: macOS Application Artifacts
+        path: ./dist/*
