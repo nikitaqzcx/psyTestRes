@@ -1,6 +1,4 @@
-customtkinter
-tkfilebrowser
-tkcalendar
+PySide6
 openpyxl
 xlrd
 python-docx
